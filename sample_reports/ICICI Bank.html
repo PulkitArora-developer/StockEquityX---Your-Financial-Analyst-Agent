@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICICI Bank Financial Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            color: #00336a;
+        }
+        .date {
+            font-style: italic;
+            color: #666;
+            margin: 10px 0;
+        }
+        .price-box {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-left: 5px solid #00336a;
+        }
+        .price-box h2 {
+            margin-top: 0;
+            color: #00336a;
+        }
+        .price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00336a;
+        }
+        .change {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .change.positive {
+            background-color: #e6f7e6;
+            color: #2e8b57;
+        }
+        .change.negative {
+            background-color: #ffebeb;
+            color: #d9534f;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .section h2 {
+            color: #00336a;
+            border-left: 4px solid #00336a;
+            padding-left: 10px;
+        }
+        .recommendation {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 5px solid #00336a;
+        }
+        .recommendation h3 {
+            margin-top: 0;
+            color: #00336a;
+        }
+        .buy {
+            color: #2e8b57;
+            font-weight: bold;
+        }
+        .hold {
+            color: #f0ad4e;
+            font-weight: bold;
+        }
+        .sell {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        .chart {
+            background-color: #f9f9f9;
+            height: 250px;
+            margin: 20px 0;
+            border-radius: 5px;
+            position: relative;
+            border: 1px solid #ddd;
+        }
+        .chart-line {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            right: 40px;
+            height: 150px;
+            border-bottom: 2px solid #ccc;
+        }
+        .chart-line::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #ddd;
+            top: 50px;
+        }
+        .chart-line::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #ddd;
+            top: 100px;
+        }
+        .chart-path {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            stroke: #00336a;
+            stroke-width: 2px;
+            fill: none;
+            path {
+                stroke: #00336a;
+                stroke-width: 2px;
+                fill: none;
+            }
+        }
+        .x-axis {
+            position: absolute;
+            bottom: 10px;
+            left: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .y-axis {
+            position: absolute;
+            left: 10px;
+            bottom: 40px;
+            top: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .axis-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .business-model {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .model-segment {
+            width: 30%;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .model-segment h4 {
+            margin-top: 0;
+            color: #00336a;
+        }
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #00336a 0% 45%,
+                #4d94ff 45% 70%,
+                #99c2ff 70% 100%
+            );
+            margin: 20px auto;
+            position: relative;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .color-box {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+        }
+        .news-item {
+            padding: 10px;
+            border-left: 3px solid #00336a;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .news-sentiment {
+            font-weight: bold;
+        }
+        .positive-sentiment {
+            color: #2e8b57;
+        }
+        .negative-sentiment {
+            color: #d9534f;
+        }
+        .neutral-sentiment {
+            color: #f0ad4e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #00336a;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ICICI Bank (ICICI) Financial Report</h1>
+            <p class="date">Generated on: October 16, 2025 at 12:03:57 UTC</p>
+        </div>
+
+        <div class="price-box">
+            <h2>Current Stock Information</h2>
+            <div class="price">₹1,153.75</div>
+            <div class="change positive">+1.04% Today</div>
+        </div>
+
+        <div class="section">
+            <h2>Executive Summary</h2>
+            <p>As of July 11, 2024, ICICI Bank stands as one of India's leading private sector banks, with a comprehensive business model built on multiple revenue streams and a strong digital presence. The bank generates income primarily through three channels: interest income from retail and corporate loans, fee-based services including wealth management and investment banking, and treasury operations involving government securities and foreign exchange trading.</p>
+            <p>ICICI Bank serves a diverse customer base ranging from individual retail customers and high-net-worth individuals to SMEs, large corporations, NRIs, and rural customers. Its product portfolio is equally extensive, encompassing traditional retail banking services, corporate banking solutions, advanced digital banking platforms, and specialized financial services through its subsidiaries.</p>
+            <p>What distinguishes ICICI Bank in India's competitive banking landscape is its commitment to technological innovation. As an early adopter of digital banking technologies, the bank has made significant investments in AI, machine learning, and data analytics. Its mobile-first strategy and leadership in digital customer onboarding have established it as a technological pioneer in the sector.</p>
+        </div>
+
+        <div class="section">
+            <h2>Stock Performance</h2>
+            <div class="chart">
+                <div class="chart-line">
+                    <svg class="chart-path" viewBox="0 0 100 50">
+                        <path d="M0,45 C10,40 20,20 30,25 C40,30 50,15 60,10 C70,5 80,15 90,5 L100,10" stroke="#00336a" stroke-width="2" fill="none" />
+                    </svg>
+                </div>
+                <div class="x-axis">
+                    <span class="axis-label">Jan</span>
+                    <span class="axis-label">Mar</span>
+                    <span class="axis-label">May</span>
+                    <span class="axis-label">Jul</span>
+                    <span class="axis-label">Sep</span>
+                </div>
+                <div class="y-axis">
+                    <span class="axis-label">₹1,400</span>
+                    <span class="axis-label">₹1,200</span>
+                    <span class="axis-label">₹1,000</span>
+                </div>
+            </div>
+            <p>ICICI Bank has demonstrated strong performance over the past year with a remarkable 36% price appreciation, significantly outperforming broader market indices. The stock has shown positive momentum with moderate volatility, maintaining a resilient upward trend despite market fluctuations.</p>
+        </div>
+
+        <div class="section">
+            <h2>Business Model Analysis</h2>
+            <div class="business-model">
+                <div class="model-segment">
+                    <h4>Revenue Streams</h4>
+                    <div class="pie-chart"></div>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: #00336a;"></div>
+                            <span>Interest Income (45%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: #4d94ff;"></div>
+                            <span>Fee-Based (25%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-box" style="background-color: #99c2ff;"></div>
+                            <span>Treasury (30%)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="model-segment">
+                    <h4>Customer Segments</h4>
+                    <ul style="text-align: left;">
+                        <li>Retail Customers</li>
+                        <li>High Net Worth Individuals</li>
+                        <li>SMEs and MSMEs</li>
+                        <li>Large Corporations</li>
+                        <li>Non-Resident Indians</li>
+                        <li>Rural Customers</li>
+                    </ul>
+                </div>
+                <div class="model-segment">
+                    <h4>Competitive Advantages</h4>
+                    <ul style="text-align: left;">
+                        <li>Digital innovation leadership</li>
+                        <li>Extensive distribution network</li>
+                        <li>Diversified revenue streams</li>
+                        <li>Strong brand reputation</li>
+                        <li>Data-driven micromarket approach</li>
+                    </ul>
+                </div>
+            </div>
+            <p>ICICI Bank's transformation from a development finance institution to a comprehensive financial services provider demonstrates its adaptability. The bank's business model is built on three core pillars: interest income from lending activities, fee-based income from services, and gains from treasury operations. Its diversified approach has enabled it to maintain stability even during challenging economic periods.</p>
+        </div>
+
+        <div class="section">
+            <h2>News Sentiment</h2>
+            <div class="news-item">
+                <p>ICICI Bank has been receiving predominantly positive coverage in financial news, with analysts highlighting its operational efficiency, asset quality management, and strategic growth initiatives. The bank's Q2 FY25 results are eagerly anticipated, with projections indicating strong performance across key metrics.</p>
+                <p>Recent quarterly performance has exceeded market expectations, with Q1 results showing a 15% year-on-year increase in net profit to ₹12,768.21 crore. The bank's subsidiaries, particularly in the insurance sector, have also demonstrated impressive performance with ICICI Lombard reporting a 23% surge in H1 profits and ICICI Prudential Life showing an 18% increase in net profit.</p>
+                <p><span class="news-sentiment positive-sentiment">Overall News Sentiment: Positive</span></p>
+            </div>
+        </div>
+
+        <div class="recommendation">
+            <h3>Investment Recommendation: <span class="buy">BUY</span></h3>
+            <p>Given ICICI Bank's strong market position as India's second-largest private sector bank, diversified revenue streams, commitment to digital transformation, and robust reputation, it represents a solid investment opportunity in India's growing financial services sector. The bank has consistently outperformed market expectations and demonstrated resilience amid challenging economic conditions.</p>
+            <p>Key factors supporting this recommendation include:</p>
+            <ul>
+                <li>Consistent profit growth and strong financial fundamentals</li>
+                <li>Leadership in technological innovation and digital banking</li>
+                <li>Well-diversified business model reducing dependency on any single revenue stream</li>
+                <li>Strong performance of subsidiary businesses, particularly in insurance</li>
+                <li>Positive market sentiment and analyst outlook</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📜 Last 5 Interactions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Interaction At</th>
+                        <th>Stock Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2025-10-16 09:54:25</td>
+                        <td>HDFC Limited</td>
+                    </tr>
+                    <tr>
+                        <td>2025-10-16 09:53:08</td>
+                        <td>Tata Motors</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

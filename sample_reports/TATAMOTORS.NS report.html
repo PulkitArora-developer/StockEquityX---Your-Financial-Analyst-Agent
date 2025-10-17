@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tata Motors Limited - Financial Analysis Report</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --accent: #3498db;
+            --secondary: #2ecc71;
+            --warning: #e74c3c;
+            --neutral: #f39c12;
+            --border: #333;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a4c78, #143352);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .company-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .price-tag {
+            background-color: rgba(0,0,0,0.2);
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .price-change {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-top: 5px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: var(--accent);
+            margin-top: 0;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-gap: 20px;
+        }
+        
+        .stat-box {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(0,0,0,0.1);
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .recommendation {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: rgba(46, 204, 113, 0.15);
+            border-left: 4px solid var(--secondary);
+            margin: 20px 0;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        .revenue-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            justify-content: space-around;
+            padding-top: 20px;
+        }
+        
+        .chart-bar {
+            width: 50px;
+            background: linear-gradient(to top, var(--accent), rgba(52, 152, 219, 0.3));
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+        
+        .chart-bar::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.8rem;
+        }
+        
+        .chart-bar::before {
+            content: attr(data-value);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+        }
+        
+        .chart-label {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+        
+        .axis-y {
+            position: absolute;
+            left: 0;
+            top: 20px;
+            bottom: 30px;
+            width: 1px;
+            background-color: var(--text-color);
+        }
+        
+        .axis-x {
+            position: absolute;
+            left: 0;
+            right: 20px;
+            bottom: 30px;
+            height: 1px;
+            background-color: var(--text-color);
+        }
+        
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--accent) 0% 78%,
+                var(--secondary) 78% 91%,
+                var(--neutral) 91% 97.8%,
+                var(--warning) 97.8% 100%
+            );
+            margin: 20px auto;
+        }
+        
+        .pie-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+        
+        th {
+            background-color: rgba(0,0,0,0.2);
+            color: var(--accent);
+        }
+        
+        tr:hover {
+            background-color: rgba(255,255,255,0.03);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .section-title::before {
+            content: "";
+            display: block;
+            width: 5px;
+            height: 25px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="company-title">
+                <h1>Tata Motors Limited (TML)</h1>
+                <div class="price-tag">
+                    <div>₹395.00</div>
+                    <div class="price-change">+1.2% ↑</div>
+                </div>
+            </div>
+            <p>Financial Analysis Report | Generated on: 2025-10-17 09:15:24 (UTC)</p>
+        </div>
+        
+        <div class="card">
+            <div class="section-title">
+                <h2>Executive Summary</h2>
+            </div>
+            <p>As of October 15, 2025, Tata Motors Ltd is trading at ₹395.45, showing a modest gain of 1.2% in today's session against the backdrop of its recent strategic demerger completed on October 1. The stock demonstrates moderate volatility with a volatility index of 35.6, reflecting cautious investor sentiment as the market digests the implications of the company's structural reorganization.</p>
+
+            <p>Tata Motors, a $44 billion flagship company of the Tata Group, has recently separated its operations into two distinct entities: Tata Motors Passenger Vehicles Limited (housing the JLR business and domestic passenger vehicle operations) and TML Commercial Vehicles Limited. This strategic move aims to unlock shareholder value by allowing clearer operational focus and independent growth trajectories for each business.</p>
+
+            <div class="recommendation">
+                <span>Recommendation: </span>
+                <span style="color:var(--secondary);font-weight:bold">BUY</span> with a medium to long-term investment horizon.
+            </div>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="section-title">
+                    <h3>Stock Performance</h3>
+                </div>
+                <div class="stat-box">
+                    <div>Current Price</div>
+                    <div><strong>₹395.00</strong></div>
+                </div>
+                <div class="stat-box">
+                    <div>Daily Change</div>
+                    <div style="color:var(--secondary)"><strong>+1.2%</strong></div>
+                </div>
+                <div class="stat-box">
+                    <div>Volatility Index</div>
+                    <div><strong>35.6</strong> (Moderate)</div>
+                </div>
+                <div class="stat-box">
+                    <div>Market Status</div>
+                    <div><strong>Cautiously Positive</strong></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="section-title">
+                    <h3>Financial Highlights</h3>
+                </div>
+                <div class="stat-box">
+                    <div>FY25 Revenue</div>
+                    <div><strong>₹439.7K Crore</strong> (Record)</div>
+                </div>
+                <div class="stat-box">
+                    <div>FY25 Profit Before Tax</div>
+                    <div><strong>₹34.3K Crore</strong> (All-time high)</div>
+                </div>
+                <div class="stat-box">
+                    <div>Cash Position</div>
+                    <div style="color:var(--secondary)"><strong>₹1.0K Crore</strong> (Net cash positive)</div>
+                </div>
+                <div class="stat-box">
+                    <div>Market Capitalization</div>
+                    <div><strong>$44 Billion</strong></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="section-title">
+                <h3>Revenue Segments</h3>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-label">Revenue Distribution by Segment</div>
+                <div class="pie-chart"></div>
+                <div class="pie-legend">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: var(--accent)"></span>
+                        <span>JLR: 78%</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: var(--secondary)"></span>
+                        <span>Commercial Vehicles: 13%</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: var(--neutral)"></span>
+                        <span>Passenger Vehicles: 6.8%</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: var(--warning)"></span>
+                        <span>Financing Business: 1.8%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <p>Tata Motors generates revenue through three primary business segments. Jaguar Land Rover (JLR) contributes the majority share at approximately 78% of total consolidated revenue. The Commercial Vehicle (CV) Business accounts for around 13%, while the Passenger Vehicle (PV) Business contributes about 6.8%. Additional revenue comes from the Financing Business (1.8%) and strategic investments.</p>
+        </div>
+        
+        <div class="card">
+            <div class="section-title">
+                <h3>Business Model Analysis</h3>
+            </div>
+            
+            <h4>Recent Strategic Demerger (October 2025)</h4>
+            <p>Tata Motors has separated its operations into two distinct entities:</p>
+            <ul>
+                <li><strong>Tata Motors Passenger Vehicles Limited</strong> - Houses the JLR business and domestic passenger vehicle operations</li>
+                <li><strong>TML Commercial Vehicles Limited</strong> - Focuses on commercial vehicle business operations</li>
+            </ul>
+            <p>This strategic restructuring aims to enhance operational clarity, allow for independent growth trajectories, and provide clearer valuation metrics for investors.</p>
+            
+            <h4>Key Business Segments</h4>
+            
+            <div class="stat-box" style="border-left-color:var(--accent)">
+                <div><strong>Jaguar Land Rover (JLR)</strong></div>
+                <div>78% of Revenue</div>
+            </div>
+            <p>Premium luxury vehicle brands acquired in 2008 for $3 billion with global presence across major markets including the United States, Europe, UK, and China. JLR focuses on high-end luxury passenger vehicles and serves as the company's primary profit driver.</p>
+            
+            <div class="stat-box" style="border-left-color:var(--secondary)">
+                <div><strong>Commercial Vehicle (CV) Business</strong></div>
+                <div>13% of Revenue</div>
+            </div>
+            <p>As of October 1, 2025, operates as a separate entity called TML Commercial Vehicles Limited. The business represents India's largest commercial vehicle manufacturer with facilities in Jamshedpur and Lucknow. The division is expanding internationally with subsidiaries like Tata Daewoo Mobility (South Korea) and the upcoming Iveco acquisition slated for 2026.</p>
+            
+            <div class="stat-box" style="border-left-color:var(--neutral)">
+                <div><strong>Passenger Vehicle (PV) Business</strong></div>
+                <div>6.8% of Revenue</div>
+            </div>
+            <p>Includes the domestic passenger vehicle operations and electric vehicle division, operating under Tata Motors Passenger Vehicles Limited. The company has positioned itself as a pioneer in India's electric vehicle transition, focusing on sustainable mobility solutions.</p>
+        </div>
+        
+        <div class="card">
+            <div class="section-title">
+                <h3>News Sentiment</h3>
+            </div>
+            <p>News sentiment surrounding Tata Motors remains cautiously positive, with analysts viewing the demerger favorably for long-term growth prospects. Market observers are particularly watching the upcoming Iveco acquisition slated for 2026, which will expand the commercial vehicle business globally. Institutional investors have maintained their positions post-demerger, signaling confidence in management's strategic direction.</p>
+        </div>
+        
+        <div class="card">
+            <div class="section-title">
+                <h3>Competitive Position & Innovation</h3>
+            </div>
+            <ul>
+                <li>Record revenues of Rs 439.7K Crore for FY25 with highest-ever PBT of Rs 34.3K Crore</li>
+                <li>Net auto cash positive position in FY25 with a net cash balance of Rs 1.0K Crore</li>
+                <li>Pioneer in India's electric vehicle transition</li>
+                <li>Diverse product portfolio with manufacturing facilities across multiple locations</li>
+                <li>Strong focus on digitalization, customer engagement, and sustainability</li>
+                <li>Strategic demerger enhancing clarity in operations and allowing independent growth strategies</li>
+            </ul>
+            
+            <div class="chart-container">
+                <div class="chart-label">FY25 Financial Performance (in K Crore)</div>
+                <div class="axis-y"></div>
+                <div class="axis-x"></div>
+                <div class="revenue-chart">
+                    <div class="chart-bar" style="height: 180px;" data-label="Revenue" data-value="439.7K"></div>
+                    <div class="chart-bar" style="height: 70px;" data-label="PBT" data-value="34.3K"></div>
+                    <div class="chart-bar" style="height: 20px;" data-label="Net Cash" data-value="1.0K"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="section-title">
+                <h3>📜 Last 5 Interactions</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Interaction At</th>
+                        <th>Stock Name</th>
+                        <th>Stock Findings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2025-10-17 09:11:52</td>
+                        <td>Tata Motors Limited</td>
+                        <td>As of July 5, 2023, Tata Motors Ltd is trading at ₹636.30, showing a daily decline of 0.89%. The stock is currently demonstrating a bullish trend with moderate volatility, indicating a balance between investor confidence and market uncertainty.</td>
+                    </tr>
+                    <tr>
+                        <td>2025-10-17 08:55:59</td>
+                        <td>Tata Communications Limited</td>
+                        <td>As of November 7, 2023, Tata Communications Limited has established itself as a global digital ecosystem enabler, evolving significantly from its origins as the government-owned Videsh Sanchar Nigam Limited (VSNL). Following privatization in 2002, the company has become a cornerstone of the Tata Group's technology portfolio.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="card">
+            <div class="section-title">
+                <h3>Investment Recommendation</h3>
+            </div>
+            <div class="recommendation">
+                <p><strong style="font-size:1.2em">BUY</strong> with a medium to long-term investment horizon.</p>
+            </div>
+            <p>Given the strong fundamentals, improved financial position, and strategic restructuring that should enhance operational focus, we maintain a positive outlook on Tata Motors. The company's recent demerger represents a significant step toward unlocking shareholder value by allowing clearer operational focus and independent growth trajectories for each business segment.</p>
+            
+            <p>With JLR continuing to drive profitability, a net cash positive position, and pioneering efforts in India's electric vehicle transition, Tata Motors is well-positioned for sustainable growth. The cautiously positive news sentiment and continued institutional investor confidence further support this recommendation.</p>
+        </div>
+        
+        <div class="footer">
+            <p>This report was automatically generated on 2025-10-17 09:15:24 (UTC). For informational purposes only.</p>
+            <p>© 2025 Financial Report Generation Agent</p>
+        </div>
+    </div>
+</body>
+</html>
