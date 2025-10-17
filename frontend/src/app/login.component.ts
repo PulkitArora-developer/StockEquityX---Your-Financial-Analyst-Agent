@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { AuthService } from './auth.service';
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import { AuthService } from "./auth.service";
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
   imports: [FormsModule, CommonModule],
   template: `
@@ -133,13 +133,13 @@ import { AuthService } from './auth.service';
         position: relative;
       }
       .bg-image::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: url('/assets/bt.png');
+        background-image: url("/assets/bt.png");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -153,24 +153,37 @@ import { AuthService } from './auth.service';
   ],
 })
 export class LoginComponent {
-  username = '';
-  password = '';
+  username = "";
+  password = "";
   loading = false;
-  error = '';
+  error = "";
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin() {
     this.loading = true;
-    this.error = '';
+    this.error = "";
 
-    setTimeout(() => {
-      if (this.authService.login(this.username, this.password)) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.error = 'Invalid credentials ';
-      }
-      this.loading = false;
-    }, 2000);
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        if (response && response.token) {
+          // ✅ Store token
+          localStorage.setItem("token", response.token);
+          localStorage.setItem("isLoggedIn", "true");
+
+          // ✅ Navigate to dashboard
+          this.router.navigate(["/dashboard"]);
+        } else {
+          this.error = "Invalid credentials";
+        }
+
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = "Login failed. Please try again.";
+        console.error("Login error:", err);
+        this.loading = false;
+      },
+    });
   }
 }
