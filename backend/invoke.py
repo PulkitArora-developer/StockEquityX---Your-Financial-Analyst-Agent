@@ -116,24 +116,39 @@ def lambda_handler(event, context):
             qualifier="DEFAULT"  # Optional
         )
 
-        if response.get("contentType") == "application/json":
+        if "text/event-stream" in response.get("contentType", ""):
+            content = []
+            for line in response["response"].iter_lines(chunk_size=1):
+                if line:
+                    line = line.decode("utf-8")
+                    if line.startswith("data: "):
+                        line = line[6:]
+                        content.append(line)
+
+            return json.dumps({
+                "statusCode": 200,
+                "message": "Success",
+                "response": content if content else None
+            })
+
+        elif response.get("contentType") == "application/json":
             # Handle standard JSON response
             content = []
             for chunk in response.get("response", []):
                 content.append(chunk.decode('utf-8'))
 
-            return {
+            return json.dumps({
                 "statusCode": 200,
                 "message": "Success",
-                "response": json.dumps(content) if content else None
-            }
+                "response": content if content else None
+            })
 
         else:
             # Print raw response for other content types
             print(json.loads(response))
 
-            return {
+            return json.dumps({
                 "statusCode": 200,
                 "message": "Success",
                 "response": json.dumps(response)
-            }
+            })

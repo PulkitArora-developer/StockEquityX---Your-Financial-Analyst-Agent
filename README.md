@@ -4,7 +4,7 @@ A comprehensive AI-powered financial analysis system that provides intelligent s
 
 ## 🎯 What is this?
 
-StockequityX - Your Financial Analyst Agent is an advanced financial analysis platform that leverages multiple AI agents to provide comprehensive stock market analysis. It combines real-time stock data, news sentiment analysis, business model evaluation, and technical analysis to generate detailed investment reports with Buy/Hold/Sell recommendations.
+StockEquityX - Your Financial Analyst Agent is an advanced financial analysis platform that leverages multiple AI agents to provide comprehensive stock market analysis. It combines real-time stock data, news sentiment analysis, business model evaluation, and technical analysis to generate detailed investment reports with Buy/Hold/Sell recommendations.
 
 ## 🚀 Key Features
 
