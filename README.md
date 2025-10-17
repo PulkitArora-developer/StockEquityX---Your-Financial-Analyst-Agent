@@ -153,9 +153,9 @@ if __name__ == "__main__":
 ### Environment Variables for Deployment
 ```env
 AWS_REGION=us-east-1
-S3_BUCKET_NAME=bedrock-agentcore-related-data
-BEDROCK_MODEL_ID=us.anthropic.claude-3-7-sonnet-20250219-v1:0
-SESSION_ID=financial_agent_analysis_session
+S3_BUCKET_NAME=s3_bucket
+BEDROCK_MODEL_ID=us.anthropic.claude-sonnet-4-20250514-v1:0
+SESSION_ID=financial_agent_session
 ```
 
 ## 🌐 Frontend Interface
