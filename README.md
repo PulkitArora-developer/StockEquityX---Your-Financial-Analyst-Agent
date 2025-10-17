@@ -1,4 +1,4 @@
-# 📈 StockequityX - Your Financial Analyst Agent
+# 📈 StockEquityX - Your Financial Analyst Agent
 
 A comprehensive AI-powered financial analysis system that provides intelligent stock market insights, sentiment analysis, and investment recommendations using AWS Bedrock AgentCore and multi-agent architecture.
 
